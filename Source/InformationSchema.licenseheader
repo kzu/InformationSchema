@@ -1,4 +1,6 @@
-﻿#region BSD License
+extensions: designer.cs
+extensions: .cs
+#region BSD License
 /* 
 Copyright (c) 2011, NETFx
 All rights reserved.
@@ -29,30 +31,3 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 DAMAGE.
 */
 #endregion
-
-namespace System.Data.Entity.InformationSchema
-{
-    using System.ComponentModel.DataAnnotations;
-
-    [ComplexType]
-    public class Domain
-    {
-        /// <summary>
-        /// Always returns NULL. (for T-SQL)
-        /// </summary>
-        [Column("DOMAIN_CATALOG")]
-        public string Catalog { get; set; }
-
-        /// <summary>
-        /// Always returns NULL. (for T-SQL)
-        /// </summary>
-        [Column("DOMAIN_SCHEMA")]
-        public string Schema { get; set; }
-
-        /// <summary>
-        /// Returns the unique name for the collation if the column is character data or text data type. Otherwise, NULL is returned.
-        /// </summary>
-        [Column("DOMAIN_NAME")]
-        public string Name { get; set; }
-    }
-}

@@ -33,6 +33,7 @@ DAMAGE.
 namespace System.Data.Entity.InformationSchema
 {
     using System.ComponentModel.DataAnnotations;
+    using System.Linq;
 
     [Table("COLUMNS", Schema = "INFORMATION_SCHEMA")]
     public class Column
@@ -129,6 +130,9 @@ namespace System.Data.Entity.InformationSchema
 
         public Domain Domain { get; private set; }
 
-        public KeyInfo KeyInfo { get; private set; }
+        public bool IsKey { get { return this.Table.KEYS.Any(k => k.COLUMN_NAME == this.Name); } }
+
+        [NotMapped]
+        internal Table Table { get; set; }
     }
 }

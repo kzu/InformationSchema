@@ -29,7 +29,6 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 DAMAGE.
 */
 #endregion
-
 namespace System.Data.Entity.InformationSchema
 {
     using System.Data.Common;
@@ -70,7 +69,8 @@ namespace System.Data.Entity.InformationSchema
             {
                 return this.Set<Table>()
                     .AsNoTracking()
-                    .Include("Columns.KeyInfo")
+                    .Include("Columns")
+                    .Include("Keys")
                     .Where(t => t.TABLE_TYPE == "BASE TABLE");
             }
         }
@@ -90,8 +90,8 @@ namespace System.Data.Entity.InformationSchema
         {
             base.OnModelCreating(modelBuilder);
 
+            // Map internal properties.
             modelBuilder.Entity<Table>().Property(x => x.TABLE_TYPE);
-
             modelBuilder.Entity<Column>().Property(x => x.TABLE_CATALOG);
             modelBuilder.Entity<Column>().Property(x => x.TABLE_SCHEMA);
             modelBuilder.Entity<Column>().Property(x => x.TABLE_NAME);
@@ -99,9 +99,11 @@ namespace System.Data.Entity.InformationSchema
 
             modelBuilder.Entity<Table>().HasKey(x => new { x.Catalog, x.Schema, x.Name });
             modelBuilder.Entity<Column>().HasKey(x => new { x.TABLE_CATALOG, x.TABLE_SCHEMA, x.TABLE_NAME, x.Name });
-            modelBuilder.Entity<Column>()
-                .HasOptional(x => x.KeyInfo)
-                .WithRequired();
+            modelBuilder.Entity<Table>()
+                .HasMany(x => x.KEYS)
+                .WithOptional()
+                .HasForeignKey(x => new { x.TABLE_CATALOG, x.TABLE_SCHEMA, x.TABLE_NAME });
+            modelBuilder.Entity<Table>().HasMany(x => x.COLUMNS);
 
             modelBuilder.Entity<KeyInfo>().HasKey(x => new { x.TABLE_CATALOG, x.TABLE_SCHEMA, x.TABLE_NAME, x.COLUMN_NAME });
         }

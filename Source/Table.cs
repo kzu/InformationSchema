@@ -34,14 +34,20 @@ namespace System.Data.Entity.InformationSchema
 {
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Collections.Specialized;
     using System.ComponentModel.DataAnnotations;
+    using System.Linq;
 
     [Table("TABLES", Schema = "INFORMATION_SCHEMA")]
     public class Table
     {
-        public Table()
+        protected Table()
         {
-            this.Columns = new Collection<Column>();
+            this.COLUMNS = new ObservableCollection<Column>();
+            // Monitor columns added/removed to set the column parent 
+            // table while avoiding a reference loop for EF.
+            this.COLUMNS.CollectionChanged += OnColumnsChanged;
+            this.KEYS = new Collection<KeyInfo>();
         }
 
         [Column("TABLE_CATALOG")]
@@ -51,8 +57,23 @@ namespace System.Data.Entity.InformationSchema
         [Column("TABLE_NAME")]
         public string Name { get; private set; }
 
+        [NotMapped]
+        public IEnumerable<Column> Columns { get { return this.COLUMNS; } }
+
         internal string TABLE_TYPE { get; private set; }
 
-        public ICollection<Column> Columns { get; set; }
+        internal ObservableCollection<Column> COLUMNS { get; set; }
+
+        // Exposing these at this level because joining with Column 
+        // fails. See http://kzu.to/MEwThQ for the previous approach.
+        internal ICollection<KeyInfo> KEYS { get; set; }
+
+        private void OnColumnsChanged(object sender, NotifyCollectionChangedEventArgs args)
+        {
+            if (args.Action == NotifyCollectionChangedAction.Add)
+                args.NewItems.OfType<Column>().ToList().ForEach(c => c.Table = this);
+            else if (args.Action == NotifyCollectionChangedAction.Remove)
+                args.OldItems.OfType<Column>().ToList().ForEach(c => c.Table = null);
+        }
     }
 }
