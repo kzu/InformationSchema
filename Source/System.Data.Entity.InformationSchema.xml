@@ -88,21 +88,6 @@
             </summary>
             <nuget id="System.Data.Entity.InformationSchema" />
         </member>
-        <member name="P:System.Data.Entity.InformationSchema.CharacterSet.Catalog">
-            <summary>
-            Returns master. This indicates the database in which the character set is located, if the column is character data or text data type. Otherwise, NULL is returned.
-            </summary>
-        </member>
-        <member name="P:System.Data.Entity.InformationSchema.CharacterSet.Schema">
-            <summary>
-            Always returns NULL. (for T-SQL)
-            </summary>
-        </member>
-        <member name="P:System.Data.Entity.InformationSchema.CharacterSet.Name">
-            <summary>
-            Returns the unique name for the character set if this column is character data or text data type. Otherwise, NULL is returned.
-            </summary>
-        </member>
         <member name="P:System.Data.Entity.InformationSchema.Domain.Catalog">
             <summary>
             Always returns NULL. (for T-SQL)
@@ -116,6 +101,21 @@
         <member name="P:System.Data.Entity.InformationSchema.Domain.Name">
             <summary>
             Returns the unique name for the collation if the column is character data or text data type. Otherwise, NULL is returned.
+            </summary>
+        </member>
+        <member name="P:System.Data.Entity.InformationSchema.CharacterSet.Catalog">
+            <summary>
+            Returns master. This indicates the database in which the character set is located, if the column is character data or text data type. Otherwise, NULL is returned.
+            </summary>
+        </member>
+        <member name="P:System.Data.Entity.InformationSchema.CharacterSet.Schema">
+            <summary>
+            Always returns NULL. (for T-SQL)
+            </summary>
+        </member>
+        <member name="P:System.Data.Entity.InformationSchema.CharacterSet.Name">
+            <summary>
+            Returns the unique name for the character set if this column is character data or text data type. Otherwise, NULL is returned.
             </summary>
         </member>
     </members>

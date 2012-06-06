@@ -65,7 +65,7 @@ namespace NetFx.System.Data.Entity.InformationSchema
             using (var context = new TestContext())
             using (var schema = new InformationSchemaContext(context.Database.Connection))
             {
-                schema.Tables.Include(x => x.Columns).Dump(Console.Out);
+                schema.Tables.Dump(Console.Out);
             }
         }
     }

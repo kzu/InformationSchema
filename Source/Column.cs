@@ -32,9 +32,7 @@ DAMAGE.
 
 namespace System.Data.Entity.InformationSchema
 {
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.Linq.Expressions;
 
     [Table("COLUMNS", Schema = "INFORMATION_SCHEMA")]
     public class Column
@@ -46,10 +44,10 @@ namespace System.Data.Entity.InformationSchema
             this.Domain = new Domain();
         }
 
-        private string TABLE_CATALOG { get; set; }
-        private string TABLE_SCHEMA { get; set; }
-        private string TABLE_NAME { get; set; }
-        private string IS_NULLABLE { get; set; }
+        internal string TABLE_CATALOG { get; private set; }
+        internal string TABLE_SCHEMA { get; private set; }
+        internal string TABLE_NAME { get; private set; }
+        internal string IS_NULLABLE { get; private set; }
 
         /// <summary>
         /// Column name.
@@ -131,29 +129,6 @@ namespace System.Data.Entity.InformationSchema
 
         public Domain Domain { get; private set; }
 
-        internal KeyInfo KeyInfo { get; private set; }
-
-        internal static Expression GetKey()
-        {
-            return New(x => new { x.TABLE_CATALOG, x.TABLE_SCHEMA, x.TABLE_NAME, x.Name });
-        }
-
-        internal static IEnumerable<Expression> GetHiddenProperties()
-        {
-            yield return Property(x => x.TABLE_CATALOG);
-            yield return Property(x => x.TABLE_SCHEMA);
-            yield return Property(x => x.TABLE_NAME);
-            yield return Property(x => x.IS_NULLABLE);
-        }
-
-        private static Expression<Func<Column, T>> Property<T>(Expression<Func<Column, T>> property)
-        {
-            return property;
-        }
-
-        private static Expression<Func<Column, T>> New<T>(Expression<Func<Column, T>> key)
-        {
-            return key;
-        }
+        public KeyInfo KeyInfo { get; private set; }
     }
 }

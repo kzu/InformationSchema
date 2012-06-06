@@ -32,10 +32,8 @@ DAMAGE.
 
 namespace System.Data.Entity.InformationSchema
 {
-    using System.Collections.Generic;
     using System.Data.Common;
     using System.Linq;
-    using System.Linq.Expressions;
     using System.Reflection;
 
     /// <summary>
@@ -72,7 +70,8 @@ namespace System.Data.Entity.InformationSchema
             {
                 return this.Set<Table>()
                     .AsNoTracking()
-                    .Where(Table.TablesFilter);
+                    .Include("Columns.KeyInfo")
+                    .Where(t => t.TABLE_TYPE == "BASE TABLE");
             }
         }
 
@@ -82,7 +81,8 @@ namespace System.Data.Entity.InformationSchema
             {
                 return this.Set<Table>()
                     .AsNoTracking()
-                    .Where(Table.ViewsFilter);
+                    .Include("Columns.KeyInfo")
+                    .Where(t => t.TABLE_TYPE == "VIEW");
             }
         }
 
@@ -90,22 +90,20 @@ namespace System.Data.Entity.InformationSchema
         {
             base.OnModelCreating(modelBuilder);
 
-            RegisterProperties<Table>(modelBuilder, Table.GetHiddenProperties());
-            RegisterProperties<Column>(modelBuilder, Column.GetHiddenProperties());
+            modelBuilder.Entity<Table>().Property(x => x.TABLE_TYPE);
 
-            modelBuilder.Entity<Table>().HasKey(t => new { t.Catalog, t.Schema, t.Name });
-            ((dynamic)modelBuilder.Entity<Column>()).HasKey((dynamic)Column.GetKey());
-        }
+            modelBuilder.Entity<Column>().Property(x => x.TABLE_CATALOG);
+            modelBuilder.Entity<Column>().Property(x => x.TABLE_SCHEMA);
+            modelBuilder.Entity<Column>().Property(x => x.TABLE_NAME);
+            modelBuilder.Entity<Column>().Property(x => x.IS_NULLABLE);
 
-        private void RegisterProperties<TEntity>(DbModelBuilder modelBuilder, IEnumerable<Expression> properties)
-            where TEntity : class
-        {
-            dynamic entity = modelBuilder.Entity<TEntity>();
+            modelBuilder.Entity<Table>().HasKey(x => new { x.Catalog, x.Schema, x.Name });
+            modelBuilder.Entity<Column>().HasKey(x => new { x.TABLE_CATALOG, x.TABLE_SCHEMA, x.TABLE_NAME, x.Name });
+            modelBuilder.Entity<Column>()
+                .HasOptional(x => x.KeyInfo)
+                .WithRequired();
 
-            foreach (dynamic lambda in properties)
-            {
-                entity.Property(lambda);
-            }
+            modelBuilder.Entity<KeyInfo>().HasKey(x => new { x.TABLE_CATALOG, x.TABLE_SCHEMA, x.TABLE_NAME, x.COLUMN_NAME });
         }
     }
 }

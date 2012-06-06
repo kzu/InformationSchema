@@ -35,7 +35,6 @@ namespace System.Data.Entity.InformationSchema
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel.DataAnnotations;
-    using System.Linq.Expressions;
 
     [Table("TABLES", Schema = "INFORMATION_SCHEMA")]
     public class Table
@@ -52,28 +51,8 @@ namespace System.Data.Entity.InformationSchema
         [Column("TABLE_NAME")]
         public string Name { get; private set; }
 
-        private string TABLE_TYPE { get; set; }
+        internal string TABLE_TYPE { get; private set; }
 
-        public ICollection<Column> Columns { get; private set; }
-
-        internal static Expression<Func<Table, bool>> TablesFilter
-        {
-            get { return t => t.TABLE_TYPE == "BASE TABLE"; }
-        }
-
-        internal static Expression<Func<Table, bool>> ViewsFilter
-        {
-            get { return t => t.TABLE_TYPE == "VIEW"; }
-        }
-
-        internal static IEnumerable<Expression> GetHiddenProperties()
-        {
-            yield return Property(x => x.TABLE_TYPE);
-        }
-
-        private static Expression<Func<Table, T>> Property<T>(Expression<Func<Table, T>> property)
-        {
-            return property;
-        }
+        public ICollection<Column> Columns { get; set; }
     }
 }

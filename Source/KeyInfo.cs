@@ -32,41 +32,17 @@ DAMAGE.
 
 namespace System.Data.Entity.InformationSchema
 {
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.Linq.Expressions;
 
+    [Table("KEY_COLUMN_USAGE", Schema = "INFORMATION_SCHEMA")]
     public class KeyInfo
     {
-        private string TABLE_CATALOG { get; set; }
-        private string TABLE_SCHEMA { get; set; }
-        private string TABLE_NAME { get; set; }
-        private string COLUMN_NAME { get; set; }
+        internal string TABLE_CATALOG { get; private set; }
+        internal string TABLE_SCHEMA { get; private set; }
+        internal string TABLE_NAME { get; private set; }
+        internal string COLUMN_NAME { get; private set; }
 
         [Column("ORDINAL_POSITION")]
         public int Position { get; private set; }
-
-        internal static Expression GetKey()
-        {
-            return New(x => new { x.TABLE_CATALOG, x.TABLE_SCHEMA, x.TABLE_NAME, x.COLUMN_NAME });
-        }
-
-        internal static IEnumerable<Expression> GetHiddenProperties()
-        {
-            yield return Property(x => x.TABLE_CATALOG);
-            yield return Property(x => x.TABLE_SCHEMA);
-            yield return Property(x => x.TABLE_NAME);
-            yield return Property(x => x.COLUMN_NAME);
-        }
-
-        private static Expression<Func<KeyInfo, T>> Property<T>(Expression<Func<KeyInfo, T>> property)
-        {
-            return property;
-        }
-
-        private static Expression<Func<KeyInfo, T>> New<T>(Expression<Func<KeyInfo, T>> key)
-        {
-            return key;
-        }
     }
 }
