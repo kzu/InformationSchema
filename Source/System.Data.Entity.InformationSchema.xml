@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>System.Data.Entity.InformationSchema</name>
+    </assembly>
+    <members>
+        <member name="P:System.Data.Entity.InformationSchema.Column.Name">
+            <summary>
+            Column name.
+            </summary>
+        </member>
+        <member name="P:System.Data.Entity.InformationSchema.Column.Position">
+            <summary>
+            Column identification number.
+            </summary>
+        </member>
+        <member name="P:System.Data.Entity.InformationSchema.Column.DefaultValue">
+            <summary>
+            Default value of the column.
+            </summary>
+        </member>
+        <member name="P:System.Data.Entity.InformationSchema.Column.DataType">
+            <summary>
+            System-supplied data type.
+            </summary>
+        </member>
+        <member name="P:System.Data.Entity.InformationSchema.Column.IsNullable">
+            <summary>
+            Nullability of the column.
+            </summary>
+        </member>
+        <member name="P:System.Data.Entity.InformationSchema.Column.MaxLength">
+            <summary>
+            Maximum length, in characters, for binary data, character data, or text and image data.
+            -1 for xml and large-value type data. Otherwise, NULL is returned. 
+            </summary>
+            <remarks>
+            For more information, see Data Types (Transact-SQL) (http://msdn.microsoft.com/en-us/library/ms187752).
+            </remarks>
+        </member>
+        <member name="P:System.Data.Entity.InformationSchema.Column.OctetLength">
+            <summary>
+            Maximum length, in bytes, for binary data, character data, or text and image data.
+            -1 for xml and large-value type data. Otherwise, NULL is returned. 
+            </summary>
+            <remarks>
+            For more information, see Data Types (Transact-SQL) (http://msdn.microsoft.com/en-us/library/ms187752).
+            </remarks>
+        </member>
+        <member name="P:System.Data.Entity.InformationSchema.Column.NumericPrecision">
+            <summary>
+            Precision of approximate numeric data, exact numeric data, integer data, or monetary data. Otherwise, NULL is returned.
+            </summary>
+        </member>
+        <member name="P:System.Data.Entity.InformationSchema.Column.NumericPrecisionRadix">
+            <summary>
+            Precision radix of approximate numeric data, exact numeric data, integer data, or monetary data. Otherwise, NULL is returned.
+            </summary>
+        </member>
+        <member name="P:System.Data.Entity.InformationSchema.Column.NumericScale">
+            <summary>
+            Scale of approximate numeric data, exact numeric data, integer data, or monetary data. Otherwise, NULL is returned.
+            </summary>
+        </member>
+        <member name="P:System.Data.Entity.InformationSchema.Column.DateTimePrecision">
+            <summary>
+            Subtype code for datetime and ISO interval data types. For other data types, NULL is returned.
+            </summary>
+        </member>
+        <member name="P:System.Data.Entity.InformationSchema.Collation.Catalog">
+            <summary>
+            Always returns NULL. (for T-SQL)
+            </summary>
+        </member>
+        <member name="P:System.Data.Entity.InformationSchema.Collation.Schema">
+            <summary>
+            Always returns NULL. (for T-SQL)
+            </summary>
+        </member>
+        <member name="P:System.Data.Entity.InformationSchema.Collation.Name">
+            <summary>
+            Returns the unique name for the collation if the column is character data or text data type. Otherwise, NULL is returned.
+            </summary>
+        </member>
+        <member name="T:System.Data.Entity.InformationSchema.InformationSchemaContext">
+            <summary>
+            Allows inspecting the standard INFORMATION_SCHEMA views on supported databases through Entity Framework
+            </summary>
+            <nuget id="System.Data.Entity.InformationSchema" />
+        </member>
+        <member name="P:System.Data.Entity.InformationSchema.CharacterSet.Catalog">
+            <summary>
+            Returns master. This indicates the database in which the character set is located, if the column is character data or text data type. Otherwise, NULL is returned.
+            </summary>
+        </member>
+        <member name="P:System.Data.Entity.InformationSchema.CharacterSet.Schema">
+            <summary>
+            Always returns NULL. (for T-SQL)
+            </summary>
+        </member>
+        <member name="P:System.Data.Entity.InformationSchema.CharacterSet.Name">
+            <summary>
+            Returns the unique name for the character set if this column is character data or text data type. Otherwise, NULL is returned.
+            </summary>
+        </member>
+        <member name="P:System.Data.Entity.InformationSchema.Domain.Catalog">
+            <summary>
+            Always returns NULL. (for T-SQL)
+            </summary>
+        </member>
+        <member name="P:System.Data.Entity.InformationSchema.Domain.Schema">
+            <summary>
+            Always returns NULL. (for T-SQL)
+            </summary>
+        </member>
+        <member name="P:System.Data.Entity.InformationSchema.Domain.Name">
+            <summary>
+            Returns the unique name for the collation if the column is character data or text data type. Otherwise, NULL is returned.
+            </summary>
+        </member>
+    </members>
+</doc>
