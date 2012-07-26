@@ -57,12 +57,8 @@
     <Compile Include="Collation.cs" />
     <Compile Include="Domain.cs" />
     <Compile Include="InformationSchema.cs" />
-    <Compile Include="KeyInfo.cs" />
     <Compile Include="Table.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <NuSpec Include="Package.nuspec">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </NuSpec>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

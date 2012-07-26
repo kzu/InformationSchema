@@ -4,6 +4,16 @@
         <name>System.Data.Entity.InformationSchema</name>
     </assembly>
     <members>
+        <member name="T:System.Data.Entity.InformationSchema.Column">
+            <summary>
+            Represents a colum
+            </summary>
+        </member>
+        <member name="M:System.Data.Entity.InformationSchema.Column.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Data.Entity.InformationSchema.Column"/> class.
+            </summary>
+        </member>
         <member name="P:System.Data.Entity.InformationSchema.Column.Name">
             <summary>
             Column name.
@@ -67,6 +77,21 @@
             Subtype code for datetime and ISO interval data types. For other data types, NULL is returned.
             </summary>
         </member>
+        <member name="P:System.Data.Entity.InformationSchema.Column.CharacterSet">
+            <summary>
+            The character set information if this column is character data or text data type.
+            </summary>
+        </member>
+        <member name="P:System.Data.Entity.InformationSchema.Column.Collation">
+            <summary>
+            The collation information if the column is character data or text data type.
+            </summary>
+        </member>
+        <member name="P:System.Data.Entity.InformationSchema.Column.Domain">
+            <summary>
+            If the column is a user-defined data type, returns the information of the data type.
+            </summary>
+        </member>
         <member name="P:System.Data.Entity.InformationSchema.Collation.Catalog">
             <summary>
             Always returns NULL. (for T-SQL)
@@ -88,19 +113,95 @@
             </summary>
             <nuget id="System.Data.Entity.InformationSchema" />
         </member>
+        <member name="M:System.Data.Entity.InformationSchema.InformationSchemaContext.#cctor">
+            <summary>
+            Sets the initializer for this context to null, as we never create 
+            the schema views.
+            </summary>
+        </member>
+        <member name="M:System.Data.Entity.InformationSchema.InformationSchemaContext.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Data.Entity.InformationSchema.InformationSchemaContext"/> class.
+            </summary>
+            <param name="nameOrConnectionString">Either the database name or a connection string.</param>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:System.Data.Entity.InformationSchema.InformationSchemaContext.#ctor(System.Data.Common.DbConnection,System.Boolean)" -->
+        <member name="M:System.Data.Entity.InformationSchema.InformationSchemaContext.#ctor(System.Data.Objects.ObjectContext,System.Boolean)">
+            <summary>
+            Constructs a new context instance around an existing ObjectContext.
+            </summary>
+            <param name="objectContext">An existing ObjectContext to wrap with the new context.</param>
+            <param name="dbContextOwnsObjectContext">If set to true the ObjectContext is disposed when the DbContext is disposed,
+            otherwise the caller must dispose the connection.</param>
+        </member>
+        <member name="M:System.Data.Entity.InformationSchema.InformationSchemaContext.OnModelCreating(System.Data.Entity.DbModelBuilder)">
+            <summary>
+            Customizes the default mappings.
+            </summary>
+        </member>
+        <member name="P:System.Data.Entity.InformationSchema.InformationSchemaContext.Tables">
+            <summary>
+            Gets the tables in the database.
+            </summary>
+        </member>
+        <member name="P:System.Data.Entity.InformationSchema.InformationSchemaContext.Views">
+            <summary>
+            Gets the views in the database.
+            </summary>
+        </member>
+        <member name="T:System.Data.Entity.InformationSchema.Table">
+            <summary>
+            Represents a table in the standard information schema.
+            </summary>
+        </member>
+        <member name="M:System.Data.Entity.InformationSchema.Table.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Data.Entity.InformationSchema.Table"/> class.
+            </summary>
+        </member>
+        <member name="P:System.Data.Entity.InformationSchema.Table.Catalog">
+            <summary>
+            Table qualifier.
+            </summary>
+        </member>
+        <member name="P:System.Data.Entity.InformationSchema.Table.Schema">
+            <summary>
+            Name of schema that contains the table.
+            </summary>
+        </member>
+        <member name="P:System.Data.Entity.InformationSchema.Table.Name">
+            <summary>
+            Table name.
+            </summary>
+        </member>
+        <member name="P:System.Data.Entity.InformationSchema.Table.IsView">
+            <summary>
+            Gets a value indicating whether this instance is vie instead of a table.
+            </summary>
+        </member>
+        <member name="P:System.Data.Entity.InformationSchema.Table.Columns">
+            <summary>
+            Columns in the table schema.
+            </summary>
+        </member>
+        <member name="T:System.Data.Entity.InformationSchema.Domain">
+            <summary>
+            Represents the domain information of a user-defined data type.
+            </summary>
+        </member>
         <member name="P:System.Data.Entity.InformationSchema.Domain.Catalog">
             <summary>
-            Always returns NULL. (for T-SQL)
+            If the column is an alias data type, this column is the database name in which the user-defined data type was created. Otherwise, NULL is returned.
             </summary>
         </member>
         <member name="P:System.Data.Entity.InformationSchema.Domain.Schema">
             <summary>
-            Always returns NULL. (for T-SQL)
+            If the column is a user-defined data type, this column returns the name of the schema of the user-defined data type. Otherwise, NULL is returned.
             </summary>
         </member>
         <member name="P:System.Data.Entity.InformationSchema.Domain.Name">
             <summary>
-            Returns the unique name for the collation if the column is character data or text data type. Otherwise, NULL is returned.
+            If the column is a user-defined data type, this column is the name of the user-defined data type. Otherwise, NULL is returned.
             </summary>
         </member>
         <member name="P:System.Data.Entity.InformationSchema.CharacterSet.Catalog">

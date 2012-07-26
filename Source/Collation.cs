@@ -30,9 +30,14 @@ DAMAGE.
 */
 #endregion
 
-using System.ComponentModel.DataAnnotations;
 namespace System.Data.Entity.InformationSchema
 {
+    using System.ComponentModel.DataAnnotations;
+
+    /// <summary>
+    /// Represents the collation information of a column if it is of character or text data type.
+    /// </summary>
+    ///	<nuget id="System.Data.Entity.InformationSchema" />
     [ComplexType]
     public class Collation
     {

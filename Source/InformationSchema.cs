@@ -29,11 +29,11 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 DAMAGE.
 */
 #endregion
+
 namespace System.Data.Entity.InformationSchema
 {
     using System.Data.Common;
     using System.Linq;
-    using System.Reflection;
 
     /// <summary>
     /// Allows inspecting the standard INFORMATION_SCHEMA views on supported databases through Entity Framework
@@ -41,51 +41,77 @@ namespace System.Data.Entity.InformationSchema
     ///	<nuget id="System.Data.Entity.InformationSchema" />
     public class InformationSchemaContext : DbContext
     {
-        private readonly BindingFlags ReflectionBinding = BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public;
-
+        /// <summary>
+        /// Sets the initializer for this context to null, as we never create 
+        /// the schema views.
+        /// </summary>
         static InformationSchemaContext()
         {
             Database.SetInitializer<InformationSchemaContext>(null);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InformationSchemaContext"/> class.
+        /// </summary>
+        /// <param name="nameOrConnectionString">Either the database name or a connection string.</param>
         public InformationSchemaContext(string nameOrConnectionString)
             : base(nameOrConnectionString)
         {
         }
 
+        /// <summary>
+        ///  Constructs a new context instance using the existing connection to connect to a database.
+        /// </summary>
+        /// <param name="existingConnection">An existing connection to use for the new context.</param>
+        /// <param name="contextOwnsConnection">If set to true the connection is disposed when the context is disposed, otherwise
+        //     the caller must dispose the connection.</param>
         public InformationSchemaContext(DbConnection existingConnection, bool contextOwnsConnection = false)
             : base(existingConnection, false)
         {
         }
 
+        /// <summary>
+        /// Constructs a new context instance around an existing ObjectContext.
+        /// </summary>
+        /// <param name="objectContext">An existing ObjectContext to wrap with the new context.</param>
+        /// <param name="dbContextOwnsObjectContext">If set to true the ObjectContext is disposed when the DbContext is disposed,
+        /// otherwise the caller must dispose the connection.</param>
         public InformationSchemaContext(Objects.ObjectContext objectContext, bool dbContextOwnsObjectContext = false)
             : base(objectContext, dbContextOwnsObjectContext)
         {
         }
 
+        /// <summary>
+        /// Gets the tables in the database.
+        /// </summary>
         public IQueryable<Table> Tables
         {
             get
             {
                 return this.Set<Table>()
                     .AsNoTracking()
-                    .Include("Columns")
-                    .Include("Keys")
+                    .Include(t => t.COLUMNS)
                     .Where(t => t.TABLE_TYPE == "BASE TABLE");
             }
         }
 
+        /// <summary>
+        /// Gets the views in the database.
+        /// </summary>
         public IQueryable<Table> Views
         {
             get
             {
                 return this.Set<Table>()
                     .AsNoTracking()
-                    .Include("Columns.KeyInfo")
+                    .Include(t => t.COLUMNS)
                     .Where(t => t.TABLE_TYPE == "VIEW");
             }
         }
 
+        /// <summary>
+        /// Customizes the default mappings.
+        /// </summary>
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -99,13 +125,7 @@ namespace System.Data.Entity.InformationSchema
 
             modelBuilder.Entity<Table>().HasKey(x => new { x.Catalog, x.Schema, x.Name });
             modelBuilder.Entity<Column>().HasKey(x => new { x.TABLE_CATALOG, x.TABLE_SCHEMA, x.TABLE_NAME, x.Name });
-            modelBuilder.Entity<Table>()
-                .HasMany(x => x.KEYS)
-                .WithOptional()
-                .HasForeignKey(x => new { x.TABLE_CATALOG, x.TABLE_SCHEMA, x.TABLE_NAME });
-            modelBuilder.Entity<Table>().HasMany(x => x.COLUMNS);
-
-            modelBuilder.Entity<KeyInfo>().HasKey(x => new { x.TABLE_CATALOG, x.TABLE_SCHEMA, x.TABLE_NAME, x.COLUMN_NAME });
+            modelBuilder.Entity<Table>().HasMany(x => x.COLUMNS).WithRequired().HasForeignKey(x => new { x.TABLE_CATALOG, x.TABLE_SCHEMA, x.TABLE_NAME });
         }
     }
 }

@@ -33,12 +33,18 @@ DAMAGE.
 namespace System.Data.Entity.InformationSchema
 {
     using System.ComponentModel.DataAnnotations;
-    using System.Linq;
 
+    /// <summary>
+    /// Represents a colum
+    /// </summary>
+    ///	<nuget id="System.Data.Entity.InformationSchema" />
     [Table("COLUMNS", Schema = "INFORMATION_SCHEMA")]
     public class Column
     {
-        public Column()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Column"/> class.
+        /// </summary>
+        protected Column()
         {
             this.CharacterSet = new CharacterSet();
             this.Collation = new Collation();
@@ -124,15 +130,19 @@ namespace System.Data.Entity.InformationSchema
         [Column("DATETIME_PRECISION")]
         public short? DateTimePrecision { get; private set; }
 
+        /// <summary>
+        /// The character set information if this column is character data or text data type.
+        /// </summary>
         public CharacterSet CharacterSet { get; private set; }
 
+        /// <summary>
+        /// The collation information if the column is character data or text data type.
+        /// </summary>
         public Collation Collation { get; private set; }
 
+        /// <summary>
+        /// If the column is a user-defined data type, returns the information of the data type.
+        /// </summary>
         public Domain Domain { get; private set; }
-
-        public bool IsKey { get { return this.Table.KEYS.Any(k => k.COLUMN_NAME == this.Name); } }
-
-        [NotMapped]
-        internal Table Table { get; set; }
     }
 }

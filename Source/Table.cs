@@ -34,46 +34,55 @@ namespace System.Data.Entity.InformationSchema
 {
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.Collections.Specialized;
     using System.ComponentModel.DataAnnotations;
-    using System.Linq;
 
+    /// <summary>
+    /// Represents a table in the standard information schema.
+    /// </summary>
     [Table("TABLES", Schema = "INFORMATION_SCHEMA")]
     public class Table
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Table"/> class.
+        /// </summary>
         protected Table()
         {
-            this.COLUMNS = new ObservableCollection<Column>();
-            // Monitor columns added/removed to set the column parent 
-            // table while avoiding a reference loop for EF.
-            this.COLUMNS.CollectionChanged += OnColumnsChanged;
-            this.KEYS = new Collection<KeyInfo>();
+            this.COLUMNS = new Collection<Column>();
         }
 
+        /// <summary>
+        /// Table qualifier.
+        /// </summary>
         [Column("TABLE_CATALOG")]
         public string Catalog { get; private set; }
+
+        /// <summary>
+        /// Name of schema that contains the table.
+        /// </summary>
         [Column("TABLE_SCHEMA")]
         public string Schema { get; private set; }
+
+        /// <summary>
+        /// Table name.
+        /// </summary>
         [Column("TABLE_NAME")]
         public string Name { get; private set; }
 
+        /// <summary>
+        /// Gets a value indicating whether this instance is vie instead of a table.
+        /// </summary>
+        public bool IsView { get { return this.TABLE_TYPE == "VIEW"; } }
+
+        /// <summary>
+        /// Columns in the table schema.
+        /// </summary>
         [NotMapped]
         public IEnumerable<Column> Columns { get { return this.COLUMNS; } }
 
+        // Convention: internal mapping-only properties use all uppercase 
+        // like the underlying schema tables. This allows us to expose 
+        // same-name properties (i.e. Columns)
         internal string TABLE_TYPE { get; private set; }
-
-        internal ObservableCollection<Column> COLUMNS { get; set; }
-
-        // Exposing these at this level because joining with Column 
-        // fails. See http://kzu.to/MEwThQ for the previous approach.
-        internal ICollection<KeyInfo> KEYS { get; set; }
-
-        private void OnColumnsChanged(object sender, NotifyCollectionChangedEventArgs args)
-        {
-            if (args.Action == NotifyCollectionChangedAction.Add)
-                args.NewItems.OfType<Column>().ToList().ForEach(c => c.Table = this);
-            else if (args.Action == NotifyCollectionChangedAction.Remove)
-                args.OldItems.OfType<Column>().ToList().ForEach(c => c.Table = null);
-        }
+        internal ICollection<Column> COLUMNS { get; set; }
     }
 }

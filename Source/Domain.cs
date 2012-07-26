@@ -34,23 +34,27 @@ namespace System.Data.Entity.InformationSchema
 {
     using System.ComponentModel.DataAnnotations;
 
+    /// <summary>
+    /// Represents the domain information of a user-defined data type.
+    /// </summary>
+    ///	<nuget id="System.Data.Entity.InformationSchema" />
     [ComplexType]
     public class Domain
     {
         /// <summary>
-        /// Always returns NULL. (for T-SQL)
+        /// If the column is an alias data type, this column is the database name in which the user-defined data type was created. Otherwise, NULL is returned.
         /// </summary>
         [Column("DOMAIN_CATALOG")]
         public string Catalog { get; set; }
 
         /// <summary>
-        /// Always returns NULL. (for T-SQL)
+        /// If the column is a user-defined data type, this column returns the name of the schema of the user-defined data type. Otherwise, NULL is returned.
         /// </summary>
         [Column("DOMAIN_SCHEMA")]
         public string Schema { get; set; }
 
         /// <summary>
-        /// Returns the unique name for the collation if the column is character data or text data type. Otherwise, NULL is returned.
+        /// If the column is a user-defined data type, this column is the name of the user-defined data type. Otherwise, NULL is returned.
         /// </summary>
         [Column("DOMAIN_NAME")]
         public string Name { get; set; }
