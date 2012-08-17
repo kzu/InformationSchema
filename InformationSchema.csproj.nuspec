@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <version>0.1.0.0</version>
+    <authors>Daniel Cazzulino,kzu,Clarius</authors>
+    <owners>Daniel Cazzulino,kzu,Clarius</owners>
+    <licenseUrl>http://www.opensource.org/licenses/bsd-license.php</licenseUrl>
+    <projectUrl>http://kzu.to/information_schema</projectUrl>
+    <iconUrl>http://download.codeplex.com/Project/Download/FileDownload.aspx?ProjectName=netfx&amp;DownloadId=199201</iconUrl>
+    <dependencies>
+      <dependency id="EntityFramework" version="4.1" />
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System.Data" targetFramework=".NETFramework4.0" />
+    </frameworkAssemblies>
+    <id>System.Data.Entity.InformationSchema</id>
+    <title>Information Schema mapping for Entity Framework Code First</title>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Allows inspecting the standard INFORMATION_SCHEMA views on supported databases through Entity Framework</description>
+    <language>en-US</language>
+    <tags>netfx entityframework ef schema</tags>
+  </metadata>
+</package>

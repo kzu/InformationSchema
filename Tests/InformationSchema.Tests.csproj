@@ -60,7 +60,11 @@
     <Compile Include="InformationSchemaSpec.cs" />
     <Compile Include="JsonDumper.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="InfoSchema.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Source\InformationSchema.csproj">
       <Project>{81B8643D-52FB-468B-B137-7498A1CBFACD}</Project>

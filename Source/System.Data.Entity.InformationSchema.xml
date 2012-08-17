@@ -8,6 +8,7 @@
             <summary>
             Represents a colum
             </summary>
+            <nuget id="System.Data.Entity.InformationSchema" />
         </member>
         <member name="M:System.Data.Entity.InformationSchema.Column.#ctor">
             <summary>
@@ -92,6 +93,17 @@
             If the column is a user-defined data type, returns the information of the data type.
             </summary>
         </member>
+        <member name="P:System.Data.Entity.InformationSchema.Column.KeyInfo">
+            <summary>
+            Provides additional information about the column unique and key attributes.
+            </summary>
+        </member>
+        <member name="T:System.Data.Entity.InformationSchema.Collation">
+            <summary>
+            Represents the collation information of a column if it is of character or text data type.
+            </summary>
+            <nuget id="System.Data.Entity.InformationSchema" />
+        </member>
         <member name="P:System.Data.Entity.InformationSchema.Collation.Catalog">
             <summary>
             Always returns NULL. (for T-SQL)
@@ -105,6 +117,21 @@
         <member name="P:System.Data.Entity.InformationSchema.Collation.Name">
             <summary>
             Returns the unique name for the collation if the column is character data or text data type. Otherwise, NULL is returned.
+            </summary>
+        </member>
+        <member name="T:System.Data.Entity.InformationSchema.PrimaryKey">
+            <summary>
+            Represents the primary key of a table.
+            </summary>
+        </member>
+        <member name="P:System.Data.Entity.InformationSchema.PrimaryKey.Name">
+            <summary>
+            Gets the name of the primary key.
+            </summary>
+        </member>
+        <member name="P:System.Data.Entity.InformationSchema.PrimaryKey.Columns">
+            <summary>
+            Columns that make up the primary key.
             </summary>
         </member>
         <member name="T:System.Data.Entity.InformationSchema.InformationSchemaContext">
@@ -125,7 +152,14 @@
             </summary>
             <param name="nameOrConnectionString">Either the database name or a connection string.</param>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:System.Data.Entity.InformationSchema.InformationSchemaContext.#ctor(System.Data.Common.DbConnection,System.Boolean)" -->
+        <member name="M:System.Data.Entity.InformationSchema.InformationSchemaContext.#ctor(System.Data.Common.DbConnection,System.Boolean)">
+            <summary>
+             Constructs a new context instance using the existing connection to connect to a database.
+            </summary>
+            <param name="existingConnection">An existing connection to use for the new context.</param>
+            <param name="contextOwnsConnection">If set to true the connection is disposed when the context is disposed, otherwise
+            the caller must dispose the connection.</param>
+        </member>
         <member name="M:System.Data.Entity.InformationSchema.InformationSchemaContext.#ctor(System.Data.Objects.ObjectContext,System.Boolean)">
             <summary>
             Constructs a new context instance around an existing ObjectContext.
@@ -184,10 +218,16 @@
             Columns in the table schema.
             </summary>
         </member>
+        <member name="P:System.Data.Entity.InformationSchema.Table.PrimaryKey">
+            <summary>
+            Gets the primary key of the table, if any.
+            </summary>
+        </member>
         <member name="T:System.Data.Entity.InformationSchema.Domain">
             <summary>
             Represents the domain information of a user-defined data type.
             </summary>
+            <nuget id="System.Data.Entity.InformationSchema" />
         </member>
         <member name="P:System.Data.Entity.InformationSchema.Domain.Catalog">
             <summary>
@@ -217,6 +257,21 @@
         <member name="P:System.Data.Entity.InformationSchema.CharacterSet.Name">
             <summary>
             Returns the unique name for the character set if this column is character data or text data type. Otherwise, NULL is returned.
+            </summary>
+        </member>
+        <member name="T:System.Data.Entity.InformationSchema.UniqueKey">
+            <summary>
+            Represents the unique key of a table.
+            </summary>
+        </member>
+        <member name="P:System.Data.Entity.InformationSchema.UniqueKey.Name">
+            <summary>
+            Gets the name of the unique key.
+            </summary>
+        </member>
+        <member name="P:System.Data.Entity.InformationSchema.UniqueKey.Columns">
+            <summary>
+            Columns that make up the unique key.
             </summary>
         </member>
     </members>

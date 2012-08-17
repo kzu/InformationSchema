@@ -55,8 +55,13 @@
     <Compile Include="CharacterSet.cs" />
     <Compile Include="Column.cs" />
     <Compile Include="Collation.cs" />
+    <Compile Include="UniqueKey.cs" />
+    <Compile Include="Internal\TableConstraints.cs" />
     <Compile Include="Domain.cs" />
     <Compile Include="InformationSchema.cs" />
+    <Compile Include="Internal\ConstraintColumnUsage.cs" />
+    <Compile Include="KeyInfo.cs" />
+    <Compile Include="PrimaryKey.cs" />
     <Compile Include="Table.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -64,7 +69,6 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
     <None Include="packages.config" />
     <None Include="InformationSchema.licenseheader" />
   </ItemGroup>

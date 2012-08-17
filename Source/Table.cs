@@ -35,6 +35,8 @@ namespace System.Data.Entity.InformationSchema
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel.DataAnnotations;
+    using System.Data.Entity.InformationSchema.Internal;
+    using System.Linq;
 
     /// <summary>
     /// Represents a table in the standard information schema.
@@ -42,12 +44,21 @@ namespace System.Data.Entity.InformationSchema
     [Table("TABLES", Schema = "INFORMATION_SCHEMA")]
     public class Table
     {
+        private Lazy<PrimaryKey> primaryKey;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Table"/> class.
         /// </summary>
         protected Table()
         {
             this.COLUMNS = new Collection<Column>();
+            this.CONSTRAINTS = new Collection<TableConstraints>();
+            this.primaryKey = new Lazy<PrimaryKey>(() => this.CONSTRAINTS
+                .Where(tableConstraint => tableConstraint.Type == TableConstraints.Kind.PrimaryKey)
+                .Select(tableConstraint => new PrimaryKey(tableConstraint.CONSTRAINT_NAME, tableConstraint.COLUMNS
+                    .Select(columnUsage => this.Columns.FirstOrDefault(column => column.Name == columnUsage.COLUMN_NAME))
+                    .Where(column => column != null)))
+                .FirstOrDefault());
         }
 
         /// <summary>
@@ -79,10 +90,20 @@ namespace System.Data.Entity.InformationSchema
         [NotMapped]
         public IEnumerable<Column> Columns { get { return this.COLUMNS; } }
 
+        /// <summary>
+        /// Gets the primary key of the table, if any.
+        /// </summary>
+        [NotMapped]
+        public PrimaryKey PrimaryKey
+        {
+            get { return this.primaryKey.Value; }
+        }
+
         // Convention: internal mapping-only properties use all uppercase 
         // like the underlying schema tables. This allows us to expose 
         // same-name properties (i.e. Columns)
         internal string TABLE_TYPE { get; private set; }
-        internal ICollection<Column> COLUMNS { get; set; }
+        internal ICollection<Column> COLUMNS { get; private set; }
+        internal ICollection<TableConstraints> CONSTRAINTS { get; private set; }
     }
 }

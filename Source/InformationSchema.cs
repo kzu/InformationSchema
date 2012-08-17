@@ -33,6 +33,7 @@ DAMAGE.
 namespace System.Data.Entity.InformationSchema
 {
     using System.Data.Common;
+    using System.Data.Entity.InformationSchema.Internal;
     using System.Linq;
 
     /// <summary>
@@ -64,7 +65,7 @@ namespace System.Data.Entity.InformationSchema
         /// </summary>
         /// <param name="existingConnection">An existing connection to use for the new context.</param>
         /// <param name="contextOwnsConnection">If set to true the connection is disposed when the context is disposed, otherwise
-        //     the caller must dispose the connection.</param>
+        /// the caller must dispose the connection.</param>
         public InformationSchemaContext(DbConnection existingConnection, bool contextOwnsConnection = false)
             : base(existingConnection, false)
         {
@@ -90,7 +91,8 @@ namespace System.Data.Entity.InformationSchema
             {
                 return this.Set<Table>()
                     .AsNoTracking()
-                    .Include(t => t.COLUMNS)
+                    .Include("COLUMNS.KeyInfo")
+                    .Include("CONSTRAINTS.COLUMNS")
                     .Where(t => t.TABLE_TYPE == "BASE TABLE");
             }
         }
@@ -126,6 +128,18 @@ namespace System.Data.Entity.InformationSchema
             modelBuilder.Entity<Table>().HasKey(x => new { x.Catalog, x.Schema, x.Name });
             modelBuilder.Entity<Column>().HasKey(x => new { x.TABLE_CATALOG, x.TABLE_SCHEMA, x.TABLE_NAME, x.Name });
             modelBuilder.Entity<Table>().HasMany(x => x.COLUMNS).WithRequired().HasForeignKey(x => new { x.TABLE_CATALOG, x.TABLE_SCHEMA, x.TABLE_NAME });
+            modelBuilder.Entity<Table>().HasMany(x => x.CONSTRAINTS).WithRequired().HasForeignKey(x => new { x.TABLE_CATALOG, x.TABLE_SCHEMA, x.TABLE_NAME });
+
+            modelBuilder.Entity<Column>()
+                .HasOptional(x => x.KeyInfo)
+                .WithRequired();
+
+            modelBuilder.Entity<KeyInfo>().HasKey(x => new { x.TABLE_CATALOG, x.TABLE_SCHEMA, x.TABLE_NAME, x.COLUMN_NAME });
+
+            modelBuilder.Entity<TableConstraints>().HasKey(x => new { x.TABLE_CATALOG, x.TABLE_SCHEMA, x.TABLE_NAME, x.CONSTRAINT_CATALOG, x.CONSTRAINT_SCHEMA, x.CONSTRAINT_NAME });
+            modelBuilder.Entity<TableConstraints>().HasMany(x => x.COLUMNS).WithRequired().HasForeignKey(x => new { x.TABLE_CATALOG, x.TABLE_SCHEMA, x.TABLE_NAME, x.CONSTRAINT_CATALOG, x.CONSTRAINT_SCHEMA, x.CONSTRAINT_NAME });
+
+            modelBuilder.Entity<ConstraintColumnUsage>().HasKey(x => new { x.TABLE_CATALOG, x.TABLE_SCHEMA, x.TABLE_NAME, x.COLUMN_NAME });
         }
     }
 }

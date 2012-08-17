@@ -30,63 +30,58 @@ DAMAGE.
 */
 #endregion
 
-using System;
-using System.Data.Entity;
-using System.Data.Entity.InformationSchema;
-using System.IO;
-using System.Linq;
-using Xunit;
-
-namespace NetFx.System.Data.Entity.InformationSchema
+namespace System.Data.Entity.InformationSchema.Internal
 {
-    public class InformationSchemaSpec : IDisposable
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel.DataAnnotations;
+
+    [Table("TABLE_CONSTRAINTS", Schema = "INFORMATION_SCHEMA")]
+    internal class TableConstraints
     {
-        public InformationSchemaSpec()
+        internal enum Kind
         {
-            using (var context = new TestContext("InfoSchema"))
-            {
-                if (context.Database.Exists())
-                    context.Database.Delete();
-
-                context.Database.Create();
-                context.Database.ExecuteSqlCommand(File.ReadAllText("InfoSchema.sql"));
-            }
+            PrimaryKey,
+            Unique,
+            ForeignKey,
+            Check,
         }
 
-        public void Dispose()
+        public TableConstraints()
         {
-            using (var context = new DbContext("InfoSchema"))
-            {
-                if (context.Database.Exists())
-                    context.Database.Delete();
-            }
+            this.COLUMNS = new Collection<ConstraintColumnUsage>();
         }
 
-        [Fact]
-        public void when_retrieving_tables_then_succeeds()
+        // PK
+        public string CONSTRAINT_CATALOG { get; set; }
+        public string CONSTRAINT_SCHEMA { get; set; }
+        public string CONSTRAINT_NAME { get; set; }
+
+        // FK
+        public string TABLE_CATALOG { get; private set; }
+        public string TABLE_SCHEMA { get; private set; }
+        public string TABLE_NAME { get; private set; }
+
+        private string type;
+
+        public string CONSTRAINT_TYPE
         {
-            using (var context = new TestContext("InfoSchema"))
-            using (var schema = new InformationSchemaContext(context.Database.Connection))
-            {
-                var tables = schema.Tables.ToList();
-                tables.Dump(Console.Out);
-            }
+            get { return this.type; }
+            set { this.type = value; this.Type = (Kind)Enum.Parse(typeof(Kind), value.Replace(" ", ""), true); }
         }
-    }
 
-    public class TestContext : DbContext
-    {
-        public TestContext(string nameOrConnectionString)
-            : base(nameOrConnectionString)
-        {
+        public string IS_DEFERRABLE { get; private set; }
+        public string INITIALLY_DEFERRED { get; private set; }
 
-        }
-        //public DbSet<TestEntity> Entities { get { return this.Set<TestEntity>(); } }
-    }
+        [NotMapped]
+        public Kind Type { get; private set; }
 
-    public class TestEntity
-    {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
+        [NotMapped]
+        public bool Deferrable { get { return this.IS_DEFERRABLE != "NO"; } }
+
+        [NotMapped]
+        public bool InitiallyDeferred { get { return this.INITIALLY_DEFERRED != "NO"; } }
+
+        public ICollection<ConstraintColumnUsage> COLUMNS { get; private set; }
     }
 }
