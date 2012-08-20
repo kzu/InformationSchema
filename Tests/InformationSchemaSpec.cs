@@ -35,33 +35,13 @@ using System.Data.Entity;
 using System.Data.Entity.InformationSchema;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using Xunit;
 
 namespace NetFx.System.Data.Entity.InformationSchema
 {
     public class InformationSchemaSpec : IDisposable
     {
-        public InformationSchemaSpec()
-        {
-            using (var context = new TestContext("InfoSchema"))
-            {
-                if (context.Database.Exists())
-                    context.Database.Delete();
-
-                context.Database.Create();
-                context.Database.ExecuteSqlCommand(File.ReadAllText("InfoSchema.sql"));
-            }
-        }
-
-        public void Dispose()
-        {
-            using (var context = new DbContext("InfoSchema"))
-            {
-                if (context.Database.Exists())
-                    context.Database.Delete();
-            }
-        }
-
         [Fact]
         public void when_retrieving_tables_then_succeeds()
         {
@@ -70,6 +50,37 @@ namespace NetFx.System.Data.Entity.InformationSchema
             {
                 var tables = schema.Tables.ToList();
                 tables.Dump(Console.Out);
+            }
+        }
+
+        public InformationSchemaSpec()
+        {
+            using (var context = new TestContext("InfoSchema"))
+            {
+                if (context.Database.Exists())
+                    context.Database.Delete();
+
+                while (!context.Database.Exists())
+                {
+                    try
+                    {
+                        context.Database.Create();
+                    }
+                    catch
+                    {
+                        Thread.Sleep(50);
+                    }
+                }
+                context.Database.ExecuteSqlCommand(File.ReadAllText("InfoSchema.sql"));
+            }
+        }
+
+        public void Dispose()
+        {
+            using (var context = new DbContext("InfoSchema"))
+            {
+                //if (context.Database.Exists())
+                //    context.Database.Delete();
             }
         }
     }

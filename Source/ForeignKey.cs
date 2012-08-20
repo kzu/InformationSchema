@@ -29,22 +29,30 @@ ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF S
 DAMAGE.
 */
 #endregion
-using System.IO;
-using Newtonsoft.Json;
-
-namespace NetFx.System.Data.Entity.InformationSchema
+namespace System.Data.Entity.InformationSchema
 {
-    public static class JsonDumper
+    using System.Collections.Generic;
+    using System.Linq;
+
+    /// <summary>
+    /// Represents the foreign key of a table.
+    /// </summary>
+    public class ForeignKey
     {
-        public static void Dump(this object value, TextWriter output)
+        internal ForeignKey(string name, IEnumerable<ForeignKeyMap> columns)
         {
-            JsonSerializer.Create(new JsonSerializerSettings
-            {
-                Formatting = Formatting.Indented,
-                NullValueHandling = NullValueHandling.Ignore,
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-            })
-            .Serialize(output, value);
+            this.Name = name;
+            this.Columns = columns.ToList();
         }
+
+        /// <summary>
+        /// Gets the name of the foreign key.
+        /// </summary>
+        public string Name { get; private set; }
+
+        /// <summary>
+        /// Columns that make up the foreign key.
+        /// </summary>
+        public IEnumerable<ForeignKeyMap> Columns { get; private set; }
     }
 }

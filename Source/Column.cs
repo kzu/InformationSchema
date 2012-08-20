@@ -51,6 +51,11 @@ namespace System.Data.Entity.InformationSchema
             this.Domain = new Domain();
         }
 
+        /// <summary>
+        /// Gets the table this column belongs to.
+        /// </summary>
+        public Table Table { get; private set; }
+
         internal string TABLE_CATALOG { get; private set; }
         internal string TABLE_SCHEMA { get; private set; }
         internal string TABLE_NAME { get; private set; }
@@ -144,10 +149,5 @@ namespace System.Data.Entity.InformationSchema
         /// If the column is a user-defined data type, returns the information of the data type.
         /// </summary>
         public Domain Domain { get; private set; }
-
-        /// <summary>
-        /// Provides additional information about the column unique and key attributes.
-        /// </summary>
-        public KeyInfo KeyInfo { get; private set; }
     }
 }

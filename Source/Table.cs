@@ -45,6 +45,8 @@ namespace System.Data.Entity.InformationSchema
     public class Table
     {
         private Lazy<PrimaryKey> primaryKey;
+        private Lazy<IEnumerable<UniqueKey>> uniqueKeys;
+        private Lazy<IEnumerable<ForeignKey>> foreignKeys;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Table"/> class.
@@ -56,9 +58,21 @@ namespace System.Data.Entity.InformationSchema
             this.primaryKey = new Lazy<PrimaryKey>(() => this.CONSTRAINTS
                 .Where(tableConstraint => tableConstraint.Type == TableConstraints.Kind.PrimaryKey)
                 .Select(tableConstraint => new PrimaryKey(tableConstraint.CONSTRAINT_NAME, tableConstraint.COLUMNS
-                    .Select(columnUsage => this.Columns.FirstOrDefault(column => column.Name == columnUsage.COLUMN_NAME))
+                    .Select(columnUsage => columnUsage.Column)
                     .Where(column => column != null)))
                 .FirstOrDefault());
+            this.uniqueKeys = new Lazy<IEnumerable<UniqueKey>>(() => this.CONSTRAINTS
+                .Where(tableConstraint => tableConstraint.Type == TableConstraints.Kind.Unique)
+                .Select(tableConstraint => new UniqueKey(tableConstraint.CONSTRAINT_NAME, tableConstraint.COLUMNS
+                    .Select(columnUsage => columnUsage.Column)
+                    .Where(column => column != null)))
+                .ToList());
+            this.foreignKeys = new Lazy<IEnumerable<ForeignKey>>(() => this.CONSTRAINTS
+                .Where(tableConstraint => tableConstraint.Type == TableConstraints.Kind.ForeignKey)
+                .Select(tableConstraint => new ForeignKey(tableConstraint.CONSTRAINT_NAME, tableConstraint.COLUMNS
+                    .Select(columnUsage => this.Columns.FirstOrDefault(column => column.Name == columnUsage.COLUMN_NAME))
+                    .Where(column => column != null)))
+                .ToList());
         }
 
         /// <summary>
@@ -97,6 +111,24 @@ namespace System.Data.Entity.InformationSchema
         public PrimaryKey PrimaryKey
         {
             get { return this.primaryKey.Value; }
+        }
+
+        /// <summary>
+        /// Gets the unique keys of the table, if any.
+        /// </summary>
+        [NotMapped]
+        public IEnumerable<UniqueKey> UniqueKeys
+        {
+            get { return this.uniqueKeys.Value; }
+        }
+
+        /// <summary>
+        /// Gets the foreign keys of the table, if any.
+        /// </summary>
+        [NotMapped]
+        public IEnumerable<ForeignKey> ForeignKeys
+        {
+            get { return this.foreignKeys.Value; }
         }
 
         // Convention: internal mapping-only properties use all uppercase 

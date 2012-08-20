@@ -36,6 +36,11 @@ namespace System.Data.Entity.InformationSchema.Internal
     [Table("CONSTRAINT_COLUMN_USAGE", Schema = "INFORMATION_SCHEMA")]
     internal class ConstraintColumnUsage
     {
+        /// <summary>
+        /// Gets the column this constraint belongs to.
+        /// </summary>
+        public Column Column { get; set; }
+
         // PK
         public string TABLE_CATALOG { get; private set; }
         public string TABLE_SCHEMA { get; private set; }

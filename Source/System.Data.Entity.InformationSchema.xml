@@ -4,6 +4,21 @@
         <name>System.Data.Entity.InformationSchema</name>
     </assembly>
     <members>
+        <member name="T:System.Data.Entity.InformationSchema.UniqueKey">
+            <summary>
+            Represents the unique key of a table.
+            </summary>
+        </member>
+        <member name="P:System.Data.Entity.InformationSchema.UniqueKey.Name">
+            <summary>
+            Gets the name of the unique key.
+            </summary>
+        </member>
+        <member name="P:System.Data.Entity.InformationSchema.UniqueKey.Columns">
+            <summary>
+            Columns that make up the unique key.
+            </summary>
+        </member>
         <member name="T:System.Data.Entity.InformationSchema.Column">
             <summary>
             Represents a colum
@@ -13,6 +28,11 @@
         <member name="M:System.Data.Entity.InformationSchema.Column.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:System.Data.Entity.InformationSchema.Column"/> class.
+            </summary>
+        </member>
+        <member name="P:System.Data.Entity.InformationSchema.Column.Table">
+            <summary>
+            Gets the table this column belongs to.
             </summary>
         </member>
         <member name="P:System.Data.Entity.InformationSchema.Column.Name">
@@ -91,11 +111,6 @@
         <member name="P:System.Data.Entity.InformationSchema.Column.Domain">
             <summary>
             If the column is a user-defined data type, returns the information of the data type.
-            </summary>
-        </member>
-        <member name="P:System.Data.Entity.InformationSchema.Column.KeyInfo">
-            <summary>
-            Provides additional information about the column unique and key attributes.
             </summary>
         </member>
         <member name="T:System.Data.Entity.InformationSchema.Collation">
@@ -223,6 +238,16 @@
             Gets the primary key of the table, if any.
             </summary>
         </member>
+        <member name="P:System.Data.Entity.InformationSchema.Table.UniqueKey">
+            <summary>
+            Gets the unique keys of the table, if any.
+            </summary>
+        </member>
+        <member name="P:System.Data.Entity.InformationSchema.Internal.ConstraintColumnUsage.Column">
+            <summary>
+            Gets the column this constraint belongs to.
+            </summary>
+        </member>
         <member name="T:System.Data.Entity.InformationSchema.Domain">
             <summary>
             Represents the domain information of a user-defined data type.
@@ -259,17 +284,17 @@
             Returns the unique name for the character set if this column is character data or text data type. Otherwise, NULL is returned.
             </summary>
         </member>
-        <member name="T:System.Data.Entity.InformationSchema.UniqueKey">
+        <member name="T:System.Data.Entity.InformationSchema.ForeignKey">
             <summary>
             Represents the unique key of a table.
             </summary>
         </member>
-        <member name="P:System.Data.Entity.InformationSchema.UniqueKey.Name">
+        <member name="P:System.Data.Entity.InformationSchema.ForeignKey.Name">
             <summary>
             Gets the name of the unique key.
             </summary>
         </member>
-        <member name="P:System.Data.Entity.InformationSchema.UniqueKey.Columns">
+        <member name="P:System.Data.Entity.InformationSchema.ForeignKey.Columns">
             <summary>
             Columns that make up the unique key.
             </summary>

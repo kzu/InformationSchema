@@ -91,8 +91,8 @@ namespace System.Data.Entity.InformationSchema
             {
                 return this.Set<Table>()
                     .AsNoTracking()
-                    .Include("COLUMNS.KeyInfo")
-                    .Include("CONSTRAINTS.COLUMNS")
+                    .Include(x => x.COLUMNS)
+                    .Include("CONSTRAINTS.COLUMNS.Column.Table")
                     .Where(t => t.TABLE_TYPE == "BASE TABLE");
             }
         }
@@ -107,6 +107,7 @@ namespace System.Data.Entity.InformationSchema
                 return this.Set<Table>()
                     .AsNoTracking()
                     .Include(t => t.COLUMNS)
+                    .Include("CONSTRAINTS.COLUMNS.Column.Table")
                     .Where(t => t.TABLE_TYPE == "VIEW");
             }
         }
@@ -126,20 +127,22 @@ namespace System.Data.Entity.InformationSchema
             modelBuilder.Entity<Column>().Property(x => x.IS_NULLABLE);
 
             modelBuilder.Entity<Table>().HasKey(x => new { x.Catalog, x.Schema, x.Name });
-            modelBuilder.Entity<Column>().HasKey(x => new { x.TABLE_CATALOG, x.TABLE_SCHEMA, x.TABLE_NAME, x.Name });
             modelBuilder.Entity<Table>().HasMany(x => x.COLUMNS).WithRequired().HasForeignKey(x => new { x.TABLE_CATALOG, x.TABLE_SCHEMA, x.TABLE_NAME });
             modelBuilder.Entity<Table>().HasMany(x => x.CONSTRAINTS).WithRequired().HasForeignKey(x => new { x.TABLE_CATALOG, x.TABLE_SCHEMA, x.TABLE_NAME });
 
+            modelBuilder.Entity<Column>().HasKey(x => new { x.TABLE_CATALOG, x.TABLE_SCHEMA, x.TABLE_NAME, x.Name });
             modelBuilder.Entity<Column>()
-                .HasOptional(x => x.KeyInfo)
-                .WithRequired();
-
-            modelBuilder.Entity<KeyInfo>().HasKey(x => new { x.TABLE_CATALOG, x.TABLE_SCHEMA, x.TABLE_NAME, x.COLUMN_NAME });
+                .HasRequired(x => x.Table)
+                .WithMany(x => x.COLUMNS)
+                .HasForeignKey(x => new { x.TABLE_CATALOG, x.TABLE_SCHEMA, x.TABLE_NAME });
 
             modelBuilder.Entity<TableConstraints>().HasKey(x => new { x.TABLE_CATALOG, x.TABLE_SCHEMA, x.TABLE_NAME, x.CONSTRAINT_CATALOG, x.CONSTRAINT_SCHEMA, x.CONSTRAINT_NAME });
             modelBuilder.Entity<TableConstraints>().HasMany(x => x.COLUMNS).WithRequired().HasForeignKey(x => new { x.TABLE_CATALOG, x.TABLE_SCHEMA, x.TABLE_NAME, x.CONSTRAINT_CATALOG, x.CONSTRAINT_SCHEMA, x.CONSTRAINT_NAME });
 
-            modelBuilder.Entity<ConstraintColumnUsage>().HasKey(x => new { x.TABLE_CATALOG, x.TABLE_SCHEMA, x.TABLE_NAME, x.COLUMN_NAME });
+            modelBuilder.Entity<ConstraintColumnUsage>().HasKey(x => new { x.TABLE_CATALOG, x.TABLE_SCHEMA, x.TABLE_NAME, x.COLUMN_NAME })
+                .HasRequired(x => x.Column)
+                .WithRequiredPrincipal();
+
         }
     }
 }

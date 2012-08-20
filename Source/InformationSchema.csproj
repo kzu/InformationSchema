@@ -55,12 +55,13 @@
     <Compile Include="CharacterSet.cs" />
     <Compile Include="Column.cs" />
     <Compile Include="Collation.cs" />
+    <Compile Include="ForeignKeyMap.cs" />
+    <Compile Include="ForeignKey.cs" />
     <Compile Include="UniqueKey.cs" />
     <Compile Include="Internal\TableConstraints.cs" />
     <Compile Include="Domain.cs" />
     <Compile Include="InformationSchema.cs" />
     <Compile Include="Internal\ConstraintColumnUsage.cs" />
-    <Compile Include="KeyInfo.cs" />
     <Compile Include="PrimaryKey.cs" />
     <Compile Include="Table.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

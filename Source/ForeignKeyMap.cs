@@ -31,17 +31,26 @@ DAMAGE.
 #endregion
 namespace System.Data.Entity.InformationSchema
 {
-    using System.ComponentModel.DataAnnotations;
 
-    [Table("KEY_COLUMN_USAGE", Schema = "INFORMATION_SCHEMA")]
-    public class KeyInfo
+    /// <summary>
+    /// Represents the foreign key of a table.
+    /// </summary>
+    public class ForeignKeyMap
     {
-        internal string TABLE_CATALOG { get; private set; }
-        internal string TABLE_SCHEMA { get; private set; }
-        internal string TABLE_NAME { get; private set; }
-        internal string COLUMN_NAME { get; private set; }
+        internal ForeignKeyMap(Column foreignKeyColumn, Column primaryKeyColumn)
+        {
+            this.ForeignKeyColumn = foreignKeyColumn;
+            this.PrimaryKeyColumn = primaryKeyColumn;
+        }
 
-        [Column("ORDINAL_POSITION")]
-        public int Position { get; private set; }
+        /// <summary>
+        /// Gets the foreign key column.
+        /// </summary>
+        public Column ForeignKeyColumn { get; private set; }
+
+        /// <summary>
+        /// Gets the primary key column.
+        /// </summary>
+        public Column PrimaryKeyColumn { get; private set; }
     }
 }
